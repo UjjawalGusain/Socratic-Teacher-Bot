@@ -9,7 +9,8 @@ const app = express();
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/authDB', {
+const dbURI = "mongodb+srv://Sid:Si12d34@cluster0.cvrdt.mongodb.net/Auth"
+mongoose.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'))
