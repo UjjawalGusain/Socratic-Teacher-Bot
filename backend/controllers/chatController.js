@@ -1,15 +1,15 @@
 const { HumanMessage } = require("@langchain/core/messages");
-const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
-const { getSessionHistory, withMessageHistory } = require("../utils/template");
+const { getSessionHistory, withMessageHistory } = require("../utils/socraticTemplate");
 
-// Initialize Google Gemini with LangChain
-const gemini = new ChatGoogleGenerativeAI({ model: "gemini-pro", apiKey: process.env.GOOGLE_GEMINI_API_KEY });
 
 exports.chatWithAssistant = async (req, res) => {
-  const { sessionId, studentInput } = req.body;
+  // console.log(`Request: ${req}`);
+  
+  const { sessionId, studentInput } = req.body; 
 
   try {
     // Retrieve session history and generate a new Socratic question
+    // console.log(`Student Input: ${studentInput}, session Id: ${sessionId}`);
     const response = await withMessageHistory(studentInput, sessionId);
 
     // Return the generated Socratic question

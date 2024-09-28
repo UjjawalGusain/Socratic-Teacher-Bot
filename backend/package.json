@@ -10,6 +10,7 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.3.2",
-    "mongoose": "^8.6.4"
+    "mongoose": "^8.6.4",
+    "uuid": "^10.0.0"
   }
 }
