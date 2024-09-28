@@ -1,6 +1,9 @@
+// Import necessary modules
+require("dotenv").config();
 const express = require('express');
 const mongoose = require('mongoose');
-const authRoutes = require('./routes/Auth');
+const chatRoutes = require('./routes/ChatRoutes'); // Chat route for Socratic assistant
+const authRoutes = require('./routes/Auth');       // Authentication routes
 
 // Initialize express
 const app = express();
@@ -9,17 +12,20 @@ const app = express();
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/authDB', {
+const dbURI = "mongodb+srv://Sid:Si12d34@cluster0.cvrdt.mongodb.net/Auth"
+mongoose.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
 
-// Authentication routes
-app.use('/api/auth', authRoutes);
+
+// Define routes
+app.use('/api/auth', authRoutes);      // Authentication routes
+app.use('/api/chat', chatRoutes);      // Socratic assistant chat routes
 
 // Start the server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
