@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "cd backend && node -r dotenv/config server.js"
+  },
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

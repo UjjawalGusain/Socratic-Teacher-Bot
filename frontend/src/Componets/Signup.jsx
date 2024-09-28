@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import '../CSS_Files/Signup.css'; 
+import { authEndpoints } from '../../api/api';
+import axios from 'axios';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -13,9 +15,29 @@ const Signup = () => {
     password: Yup.string().min(6, 'Too Short!').required('Required'),
   });
 
-  const handleSignup = (values) => {
-    console.log(values);
-    navigate('/chatbot');
+  const handleSignup = async (values, { setSubmitting, setFieldError }) => {
+    try {
+      // Make a POST request to the backend using Axios
+      const response = await axios.post(authEndpoints.SIGNUP_API, {
+        username: values.name,
+        email: values.email,
+        password: values.password,
+      });
+
+      // If signup is successful, redirect to the chatbot page
+      if (response.status === 201) {
+        navigate('/chatbot');
+      } 
+    } catch (error) {
+      // Handle errors and validation messages from the backend
+      if (error.response && error.response.data.msg) {
+        setFieldError('email', error.response.data.msg);  // Set error message from backend
+      } else {
+        setFieldError('email', 'Something went wrong. Please try again later.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

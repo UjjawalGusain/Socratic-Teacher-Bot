@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import '../CSS_Files/Login.css'
+import axios from 'axios'; 
+import { authEndpoints } from '../../api/api';
 
 
 const Login = () => {
@@ -13,9 +15,25 @@ const Login = () => {
     password: Yup.string().min(6, 'Too Short!').required('Required'),
   });
 
-  const handleLogin = (values) => {
-    console.log(values);
-    navigate('/chatbot');
+  const handleLogin = async (values, { setSubmitting, setFieldError }) => {
+    try {
+      const response = await axios.post(authEndpoints.LOGIN_API, values);
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+
+        navigate('/chatbot');
+      }
+    } catch (error) {
+      if (error.response && error.response.data.msg) {
+        // Display error message from backend
+        setFieldError('email', error.response.data.msg);
+      } else {
+        setFieldError('email', 'Login failed');
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
