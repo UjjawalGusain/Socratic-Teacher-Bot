@@ -1,22 +1,60 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../CSS_Files/Chatbot.css'; 
+import axios from 'axios';  // Import Axios
+import { sessionEndpoints } from '../../api/api';  // Import your API endpoints
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [sessionId, setSessionId] = useState(null);  // State to store session ID
   const chatBoxRef = useRef(null);
 
-  const handleSendMessage = () => {
+  // Function to create a new session when the component mounts
+  const createNewSession = async () => {
+    try {
+      const response = await axios.post(sessionEndpoints.CREATE_SESSION_API);
+      setSessionId(response.data.sessionId);  // Store the session ID in the state
+    } catch (error) {
+      console.error("Error creating session:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Create a new session when the component is mounted
+    createNewSession();
+  }, []);
+
+  const handleSendMessage = async () => {
     if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
+      const userMessage = { sender: 'user', text: input };
+
+      // Add user's message to the chat
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput('');
-      // Simulate bot response
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'bot', text: 'This is a bot response.' },
-        ]);
-      }, 1000);
+
+      try {
+        // Make an API call to send the message to the backend
+        const response = await axios.post(sessionEndpoints.CHAT_API, {
+          sessionId: sessionId, // Send the session ID
+          studentInput: input,  // Send the user input
+        });
+
+        const botMessage = {
+          sender: 'bot',
+          text: response.data.message, // Bot's response from the backend
+        };
+
+        // Update chat with bot's response
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+      } catch (error) {
+        console.error("Error sending message:", error);
+        const errorMessage = {
+          sender: 'bot',
+          text: 'Sorry, something went wrong. Please try again later.',
+        };
+        setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      }
     }
   };
 
@@ -57,6 +95,7 @@ const ChatBot = () => {
           <button
             onClick={handleSendMessage}
             className="chat-button"
+            disabled={!input.trim() || !sessionId}  // Disable if input is empty or sessionId is missing
           >
             Send
           </button>
