@@ -1,6 +1,6 @@
 const Session = require('../models/SessionSchema'); // Importing the Session model
 const { v4: uuidv4 } = require('uuid'); // Using uuid to generate a unique sessionId
-const { withMessageHistory, getSessionHistory } = require('../utils/socraticTemplate');
+const { withMessageHistory } = require('../utils/socraticTemplate');
 
 // Function to create a new session
 const createSession = async (req, res) => {
@@ -37,19 +37,15 @@ const handleStudentInput = async (req, res) => {
   }
 };
 
-// Controller to get session history
-const getSessionHistoryController = async (req, res) => {
-  const { sessionId } = req.params;
-
-  try {
-    const session = await getSessionHistory(sessionId);
-    res.status(200).json(session);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+// Retrieve or create session history
+const getSessionHistory = async (sessionId) => {
+  let session = await Session.findOne({ sessionId });
+  if (!session) {
+    session = new Session({ sessionId, messages: [] });
+    await session.save();
   }
+  return session;
 };
 
-module.exports = { handleStudentInput, getSessionHistoryController };
 
-
-module.exports = { createSession };
+module.exports = { handleStudentInput, getSessionHistory, createSession };

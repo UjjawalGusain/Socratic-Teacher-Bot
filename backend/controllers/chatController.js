@@ -1,8 +1,7 @@
 const { HumanMessage } = require("@langchain/core/messages");
-const { getSessionHistory, withMessageHistory } = require("../utils/socraticTemplate");
+const { withMessageHistory } = require("../utils/socraticTemplate");
 
-
-exports.chatWithAssistant = async (req, res) => {
+const chatWithAssistant = async (req, res) => {
   // console.log(`Request: ${req}`);
   
   const { sessionId, studentInput } = req.body; 
@@ -19,3 +18,6 @@ exports.chatWithAssistant = async (req, res) => {
     res.status(500).json({ error: "Failed to generate response" });
   }
 };
+
+
+module.exports = { chatWithAssistant };

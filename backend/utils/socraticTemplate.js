@@ -1,7 +1,7 @@
 const { PromptTemplate } = require("@langchain/core/prompts");
 const { HumanMessage } = require("@langchain/core/messages");
-const Session = require("../models/SessionSchema");
 const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
+const {getSessionHistory} = require('../controllers/sessionController')
 
 // Use the Google Gemini model
 const gemini = new ChatGoogleGenerativeAI({
@@ -27,15 +27,6 @@ const prompt = new PromptTemplate({
   template: socraticTemplate,
 });
 
-// Retrieve or create session history
-const getSessionHistory = async (sessionId) => {
-  let session = await Session.findOne({ sessionId });
-  if (!session) {
-    session = new Session({ sessionId, messages: [] });
-    await session.save();
-  }
-  return session;
-};
 
 // Use message history when generating responses
 const withMessageHistory = async (studentInput, sessionId) => {
@@ -84,4 +75,4 @@ const withMessageHistory = async (studentInput, sessionId) => {
   return response.content;
 };
 
-module.exports = { getSessionHistory, withMessageHistory };
+module.exports = { withMessageHistory };
