@@ -1,7 +1,7 @@
 const { PromptTemplate } = require("@langchain/core/prompts");
 const { HumanMessage } = require("@langchain/core/messages");
 const { InMemoryChatMessageHistory, RunnableWithMessageHistory } = require("@langchain/core/runnables");
-const Session = require("../models/Session");
+const Session = require("../models/SessionSchema");
 
 // Socratic question template
 const socraticTemplate = `
