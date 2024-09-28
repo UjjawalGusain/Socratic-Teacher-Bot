@@ -1,18 +1,13 @@
-const { SystemMessagePromptTemplate } = require("@langchain/core/prompts");
-const {
-  HumanMessage,
-  AIMessage,
-  SystemMessage,
-} = require("@langchain/core/messages");
+const { HumanMessage } = require("@langchain/core/messages");
 const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
-const {
-  FewShotChatMessagePromptTemplate,
-  ChatPromptTemplate,
-} = require("@langchain/core/prompts");
-const { getSessionHistory } = require('./sessionUtils'); // Update import path
-const { diagnosticPrompts } = require("../prompts/promptsExamples");
+const { FewShotChatMessagePromptTemplate, ChatPromptTemplate } = require("@langchain/core/prompts");
+const { getSessionHistory } = require('./sessionUtils'); // Ensure correct path
+const { allPrompts } = require("../prompts/promptsExamples");
 
-// Use the Google Gemini model
+// Use the Google Gemini model with proper error handling for API key
+if (!process.env.GOOGLE_GEMINI_API_KEY) {
+  throw new Error("Missing Google Gemini API key. Please set it in your environment variables.");
+}
 const gemini = new ChatGoogleGenerativeAI({
   model: "gemini-pro",
   apiKey: process.env.GOOGLE_GEMINI_API_KEY,
@@ -24,27 +19,38 @@ const examplePrompt = ChatPromptTemplate.fromMessages([
   ["ai", "{output}"],
 ]);
 
-// Create a FewShot template using diagnostic prompts as examples
+// Create a FewShot template using prompts as examples
 const fewShotPrompt = new FewShotChatMessagePromptTemplate({
   examplePrompt,
-  examples: diagnosticPrompts.map((prompt) => ({
+  examples: allPrompts.map((prompt) => ({
     input: prompt.input,
     output: prompt.output,
   })),
   inputVariables: ["studentInput", "conversationHistory"], // Keep input variables relevant
 });
 
-// Corrected ChatPromptTemplate for the Socratic assistant
-// const message = `You are a Socratic teaching assistant helping a student understand sorting algorithms.
-//    You should never directly tell the student the answer. Instead, ask probing questions to guide them.
-//    The current conversation history is as follows: {conversationHistory}
-//    The student's input is: {studentInput}
-//    Your next Socratic question should be:`;
-
-const message = `You are a teaching assistant helping a student understand sorting algorithms.
+// Corrected ChatPromptTemplate for Socratic guidance
+const message = `You are a Socratic teaching assistant helping a student understand sorting algorithms.
+   You should never directly tell the student the answer. Instead, based on their input, ask a probing question that helps them reflect deeper.
    The current conversation history is as follows: {conversationHistory}
    The student's input is: {studentInput}
+   
+   Do not repeat any questions. Avoid asking the same question more than once, even if the topic persists.
+   Do not transition from a question suddenly. Ensure smooth transitions between questions and topics.
+   Slowly advance the concept. Each new question should be a gradual step towards deeper understanding, not a sudden leap.
+   
+   ### Answer Format:
+   1. Ask one clear and focused Socratic question based on their input. 
+   2. Always respond with a question designed to promote critical thinking.
+   3. Take the user towards the right answer by asking right questions. Questions should not repeat.
+   4. If user does not understand, give hints inside the question.
+   
+   Formulate the next question to guide the student in their learning process. 
+   
+   Your answer should follow this format:
+    - Ask one Socratic question directly related to their input
 `;
+
 
 // Create a ChatPromptTemplate using the fromMessages method
 const socraticTemplate = ChatPromptTemplate.fromMessages([
@@ -52,46 +58,58 @@ const socraticTemplate = ChatPromptTemplate.fromMessages([
   fewShotPrompt,
 ]);
 
+// Function to generate Socratic questions based on the student's input and session history
 const withMessageHistory = async (studentInput, sessionId) => {
-  // Get the session history
-  const session = await getSessionHistory(sessionId);
+  try {
+    // Get the session history
+    const session = await getSessionHistory(sessionId);
 
-  // Add the student's message to session history
-  session.messages.push({ role: "student", content: studentInput });
-  await session.save();
+    // Ensure session.messages exists, initialize if empty
+    if (!session.messages) {
+      session.messages = [];
+    }
 
-  // Format the conversation history
-  const conversationHistory = session.messages
-    .map((message) => `${message.role}: ${message.content}`)
-    .join("\n");
+    // Add the student's message to session history
+    session.messages.push({ role: "student", content: studentInput });
+    await session.save();
 
-  // Generate the Socratic prompt
-  const socraticPromptStr = await socraticTemplate.format({
-    studentInput,
-    conversationHistory,
-  });
+    // Format the conversation history (adding line breaks for readability)
+    const conversationHistory = session.messages
+      .map((message) => `${message.role === 'student' ? 'Student' : 'Assistant'}: ${message.content}`)
+      .join("\n\n");  // Double line break for readability
 
-  // Ensure Socratic prompt is not empty
-  if (!socraticPromptStr) {
-    throw new Error("Socratic prompt string is empty!");
+    // Generate the Socratic prompt
+    const socraticPromptStr = await socraticTemplate.format({
+      studentInput,
+      conversationHistory,
+    });
+
+    // Ensure Socratic prompt is not empty
+    if (!socraticPromptStr) {
+      throw new Error("Socratic prompt string is empty!");
+    }
+
+    // Get the assistant's response using the Gemini model
+    const response = await gemini.invoke([
+      new HumanMessage({ content: socraticPromptStr }),
+    ]);
+
+    // Ensure response content is not empty
+    if (!response || !response.content) {
+      throw new Error("Response content is empty!");
+    }
+
+    // Add assistant's response to the session
+    session.messages.push({ role: "assistant", content: response.content });
+    await session.save();
+
+    // Return assistant's response
+    return response.content;
+
+  } catch (error) {
+    console.error("Error in withMessageHistory:", error);
+    throw new Error("Failed to process the student's message. Please try again.");
   }
-
-  // Get the assistant's response
-  const response = await gemini.invoke([
-    new HumanMessage({ content: socraticPromptStr }),
-  ]);
-
-  // Ensure response content is not empty
-  if (!response.content) {
-    throw new Error("Response content is empty!");
-  }
-
-  // Add assistant's response to the session
-  session.messages.push({ role: "assistant", content: response.content });
-  await session.save();
-
-  // Return assistant's response
-  return response.content;
 };
 
 module.exports = { withMessageHistory };
