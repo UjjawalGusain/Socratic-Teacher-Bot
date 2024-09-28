@@ -9,7 +9,7 @@ const {
   FewShotChatMessagePromptTemplate,
   ChatPromptTemplate,
 } = require("@langchain/core/prompts");
-const { getSessionHistory } = require("../controllers/sessionController");
+const { getSessionHistory } = require('./sessionUtils'); // Update import path
 const { diagnosticPrompts } = require("../prompts/promptsExamples");
 
 // Use the Google Gemini model
@@ -35,18 +35,21 @@ const fewShotPrompt = new FewShotChatMessagePromptTemplate({
 });
 
 // Corrected ChatPromptTemplate for the Socratic assistant
-const message = `You are a Socratic teaching assistant helping a student understand sorting algorithms.
-   You should never directly tell the student the answer. Instead, ask probing questions to guide them.
-   Here are some examples of previous interactions to guide your response:
-   ${diagnosticPrompts.map((prompt) => `Human: ${prompt.input}\nAI: ${prompt.output}`).join("\n")}
+// const message = `You are a Socratic teaching assistant helping a student understand sorting algorithms.
+//    You should never directly tell the student the answer. Instead, ask probing questions to guide them.
+//    The current conversation history is as follows: {conversationHistory}
+//    The student's input is: {studentInput}
+//    Your next Socratic question should be:`;
+
+const message = `You are a teaching assistant helping a student understand sorting algorithms.
    The current conversation history is as follows: {conversationHistory}
    The student's input is: {studentInput}
-   Your next Socratic question should be:`;
-
+`;
 
 // Create a ChatPromptTemplate using the fromMessages method
 const socraticTemplate = ChatPromptTemplate.fromMessages([
   ["system", message], // Use "system" for the role of the message
+  fewShotPrompt,
 ]);
 
 const withMessageHistory = async (studentInput, sessionId) => {
@@ -57,14 +60,10 @@ const withMessageHistory = async (studentInput, sessionId) => {
   session.messages.push({ role: "student", content: studentInput });
   await session.save();
 
-   // Format the conversation history
+  // Format the conversation history
   const conversationHistory = session.messages
     .map((message) => `${message.role}: ${message.content}`)
     .join("\n");
-
-  // Log the values to ensure they're correct
-  // console.log("Student Input:", studentInput);
-  // console.log("Conversation History:", conversationHistory);
 
   // Generate the Socratic prompt
   const socraticPromptStr = await socraticTemplate.format({
