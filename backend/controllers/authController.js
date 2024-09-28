@@ -1,14 +1,9 @@
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const router = express.Router();
+const User = require('../models/UserSchema');
 
-// JWT secret key
-const JWT_SECRET = 'your_jwt_secret_key';
-
-// Register route
-router.post('/register', async (req, res) => {
+// Controller function to handle user registration
+const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
@@ -18,11 +13,11 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // Create a new user
+        // Hash password and create a new user
         user = new User({
             username,
             email,
-            password: await bcrypt.hash(password, 10)
+            password: await bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT))
         });
 
         await user.save();
@@ -30,10 +25,10 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+};
 
-// Login route
-router.post('/login', async (req, res) => {
+// Controller function to handle user login
+const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -50,11 +45,11 @@ router.post('/login', async (req, res) => {
         }
 
         // Create and sign JWT token
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-});
+};
 
-module.exports = router;
+module.exports = { registerUser, loginUser };
