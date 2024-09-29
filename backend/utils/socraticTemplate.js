@@ -29,9 +29,12 @@ const fewShotPrompt = new FewShotChatMessagePromptTemplate({
   inputVariables: ["studentInput", "conversationHistory"], // Keep input variables relevant
 });
 
+console.log(fewShotPrompt);
+
+
 // Corrected ChatPromptTemplate for Socratic guidance
 const message = `You are a Socratic teaching assistant and your name is Mr. Socrates helping a student understand sorting algorithms.
-   You should never directly tell the student the answer. Instead, based on their input, ask a probing question that helps them reflect deeper.
+   You should never directly tell the student the answer. Instead, based on their input, ask a probing question that helps them reflect deeper. Give them a hint to their answer in your question.
    The current conversation history is as follows: {conversationHistory}
    The student's input is: {studentInput}
    
@@ -48,15 +51,16 @@ const message = `You are a Socratic teaching assistant and your name is Mr. Socr
    Formulate the next question to guide the student in their learning process. 
    
    Your answer should follow this format:
-    - Always reply to greeting by greetings, and then your name, and then a question.
+    - Always reply to greeting by greetings, and then your name, and then a question but only for the first question.
     - Ask one Socratic question directly related to their input.
-`;
+
+   Examples: ${fewShotPrompt}`;
 
 
 // Create a ChatPromptTemplate using the fromMessages method
 const socraticTemplate = ChatPromptTemplate.fromMessages([
   ["system", message], // Use "system" for the role of the message
-  fewShotPrompt,
+  // fewShotPrompt,
 ]);
 
 // Function to generate Socratic questions based on the student's input and session history

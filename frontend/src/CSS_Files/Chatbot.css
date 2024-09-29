@@ -21,6 +21,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 }
 
 .chat-header {
@@ -109,9 +110,9 @@ body {
 /* Add this to position the image */
 .chat-image {
   position: absolute;
-  top: 10%;
-  right: 10;
-  transform: translateY(-50%);
+  top: -19%;
+  left: 35%;
+  /* transform: translateY(-50%); */
   width: auto;
   height: 15vh;
   object-fit: cover;

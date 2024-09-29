@@ -1,24 +1,25 @@
 /* General Styles */
-body {
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #6a5acd, #8e44ad);
 }
 
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   min-height: 100vh;
-  background-color: #f5f6fa;
+  background-color: rgb(225, 210, 210);
 }
 
 .login-form {
-  background: #fff;
-  /* display: flex;
-  flex-direction: column;
-  align-items: center; */
+  background: #f4eeee;
   padding: 2.5rem 2rem;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -68,9 +69,8 @@ h2 {
 
 .options {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
   font-size: 14px;
 }
 
@@ -87,6 +87,8 @@ h2 {
 .login-button {
   background: linear-gradient(90deg, #6a5acd, #9b59b6);
   color: #fff;
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 12px 25px;
   border-radius: 30px;
   border: none;
