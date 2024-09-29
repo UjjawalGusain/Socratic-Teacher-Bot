@@ -3,9 +3,9 @@ require("dotenv").config();
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const chatRoutes = require('./routes/chatRoutes'); // Chat route for Socratic assistant
-const authRoutes = require('./routes/authRoutes');       // Authentication routes
-const sessionRoutes = require('./routes/sessionRoutes')
+const chatRoutes = require('./routes/chatRoutes.js'); // Chat route for Socratic assistant
+const authRoutes = require('./routes/authRoutes.js');       // Authentication routes
+const sessionRoutes = require('./routes/sessionRoutes.js')
 const connectDB = require('./config/db')
 
 
