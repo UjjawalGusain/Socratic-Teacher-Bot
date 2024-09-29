@@ -2,15 +2,15 @@
     "version": 2,
     "name": "socratic-teacher-backend",
     "builds": [
-      {
-        "src": "src/server.js",
-        "use": "@vercel/node"
-      }
+        {
+            "src": "server.js",  
+            "use": "@vercel/node"
+        }
     ],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/src/server.js"
-      }
+        {
+            "src": "/(.*)",
+            "dest": "server.js"  
+        }
     ]
-  }
+}
