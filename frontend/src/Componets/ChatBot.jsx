@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../CSS_Files/Chatbot.css'; 
-import axios from 'axios';  // Import Axios
+import axios from 'axios';
 import { sessionEndpoints } from '../../api/api';  // Import your API endpoints
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [sessionId, setSessionId] = useState(null);  // State to store session ID
+  const [isTyping, setIsTyping] = useState(false);   // Track if bot is typing
   const chatBoxRef = useRef(null);
 
   // Function to create a new session when the component mounts
@@ -20,9 +21,31 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    // Create a new session when the component is mounted
     createNewSession();
   }, []);
+
+  // Typing effect for bot's response
+  const typeBotMessage = (message) => {
+    let currentIndex = 0;
+    const botMessage = { sender: 'bot', text: '' };
+
+    setIsTyping(true);  // Start typing
+
+    const typeInterval = setInterval(() => {
+      if (currentIndex < message.length) {
+        botMessage.text += message[currentIndex];
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1] = botMessage;
+          return updatedMessages;
+        });
+        currentIndex++;
+      } else {
+        setIsTyping(false);  // Stop typing once message is fully typed
+        clearInterval(typeInterval);
+      }
+    }, 50);  // Adjust this interval for typing speed
+  };
 
   const handleSendMessage = async () => {
     if (input.trim()) {
@@ -33,19 +56,16 @@ const ChatBot = () => {
       setInput('');
 
       try {
-        // Make an API call to send the message to the backend
         const response = await axios.post(sessionEndpoints.CHAT_API, {
-          sessionId: sessionId, // Send the session ID
-          studentInput: input,  // Send the user input
+          sessionId: sessionId,
+          studentInput: input,
         });
 
-        const botMessage = {
-          sender: 'bot',
-          text: response.data.message, // Bot's response from the backend
-        };
+        // Add a placeholder message for the bot while typing
+        setMessages((prevMessages) => [...prevMessages, { sender: 'bot', text: '' }]);
 
-        // Update chat with bot's response
-        setMessages((prevMessages) => [...prevMessages, botMessage]);
+        // Start typing the bot's message
+        typeBotMessage(response.data.message);
 
       } catch (error) {
         console.error("Error sending message:", error);
@@ -59,7 +79,6 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    // Scroll to the bottom when a new message is added
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
@@ -67,23 +86,19 @@ const ChatBot = () => {
 
   return (
     <div className="chat-container">
+      <img src="public/2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" alt="Chatbot Image" className="chat-image" />
       <div className="chat-box">
         <h2 className="chat-header">ChatBot</h2>
-        <div
-          ref={chatBoxRef}
-          className="chat-messages"
-        >
+        <div ref={chatBoxRef} className="chat-messages">
           {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`message ${msg.sender}`}
-            >
+            <div key={index} className={`message ${msg.sender}`}>
               <div className={`message-bubble ${msg.sender}`}>
                 {msg.text}
               </div>
             </div>
           ))}
         </div>
+        {isTyping && <div className="typing-indicator">Mr Socrates is typing...</div>}
         <div className="input-container">
           <input
             type="text"
@@ -95,7 +110,7 @@ const ChatBot = () => {
           <button
             onClick={handleSendMessage}
             className="chat-button"
-            disabled={!input.trim() || !sessionId}  // Disable if input is empty or sessionId is missing
+            disabled={!input.trim() || !sessionId || isTyping}  // Disable when bot is typing
           >
             Send
           </button>
