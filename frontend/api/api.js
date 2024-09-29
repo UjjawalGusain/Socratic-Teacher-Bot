@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://socratic-teacher-bot.vercel.app/api";
 
 const authEndpoints = {
     LOGIN_API: BASE_URL + "/auth/login", // post
