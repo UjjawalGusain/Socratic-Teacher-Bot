@@ -1,91 +1,149 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #6a5acd, #8e44ad);
+}
+
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f6fa;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+}
+
+.login-form {
+  background: #fff;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  padding: 2.5rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-form:hover {
+  transform: translateY(-5px);
+}
+
+h2 {
+  margin-bottom: 1.8rem;
+  color: #333;
+  font-size: 24px;
+}
+
+.form-field {
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  background-color: #f1f1f1;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-field input:focus {
+  background-color: #fff;
+  border-color: #9b59b6;
+  box-shadow: 0 0 5px rgba(155, 89, 182, 0.3);
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+.forgot-password {
+  color: #6c5ce7;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+  color: #9b59b6;
+}
+
+.login-button {
+  background: linear-gradient(90deg, #6a5acd, #9b59b6);
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.login-button:hover {
+  background: linear-gradient(90deg, #9b59b6, #6a5acd);
+}
+
+.signup-link {
+  color: #6c5ce7;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.signup-link:hover {
+  color: #9b59b6;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
   .login-form {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    text-align: center;
+    width: 90%;
+    padding: 2rem 1.5rem;
   }
-  
+
   h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
+    font-size: 22px;
   }
-  
-  .form-field {
-    margin-bottom: 1rem;
-    position: relative;
+
+  .login-button {
+    font-size: 15px;
+    padding: 10px 20px;
   }
-  
-  .form-field input {
+}
+
+@media (max-width: 480px) {
+  .login-form {
     width: 100%;
-    padding: 10px 15px;
-    border-radius: 50px;
-    border: 1px solid #ddd;
-    background-color: #f1f1f1;
-    font-size: 16px;
-    outline: none;
-    transition: all 0.3s ease;
+    padding: 1.5rem 1rem;
   }
-  
-  .form-field input:focus {
-    background-color: #fff;
-    border-color: #9b59b6;
+
+  h2 {
+    font-size: 20px;
   }
-  
-  .error {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
+
+  .login-button {
+    font-size: 14px;
+    padding: 8px 15px;
   }
-  
-  .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+
+  .form-field input {
     font-size: 14px;
   }
-  
-  .forgot-password {
-    color: #6c5ce7;
-    text-decoration: none;
-  }
-  
-  .forgot-password:hover {
-    text-decoration: underline;
-  }
-  
-  .login-button {
-    background: linear-gradient(90deg, #6a5acd, #9b59b6);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s ease;
-    width: 100%;
-  }
-  
-  .login-button:hover {
-    background: linear-gradient(90deg, #9b59b6, #6a5acd);
-  }
-  
-  .signup-link {
-    color: #6c5ce7;
-    text-decoration: none;
-  }
-  
-  .signup-link:hover {
-    text-decoration: underline;
-  }
-  
+}
