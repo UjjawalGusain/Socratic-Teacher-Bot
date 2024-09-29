@@ -13,7 +13,7 @@ const connectDB = require('./config/db')
 const app = express();
 
 app.use(cors({
-    origin: '*', 
+    origin: 'https://socratic-teacher-bot-2.vercel.app', 
     methods: 'GET,POST,PUT,DELETE',  
     credentials: true             
   }));
