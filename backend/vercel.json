@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "socratic-teacher-backend",
+    "name": "socratic_teacher_bot",
     "builds": [
         {
             "src": "server.js",  
