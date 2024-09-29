@@ -29,7 +29,7 @@ const fewShotPrompt = new FewShotChatMessagePromptTemplate({
   inputVariables: ["studentInput", "conversationHistory"], // Keep input variables relevant
 });
 
-console.log(fewShotPrompt);
+// console.log(fewShotPrompt);
 
 
 // Corrected ChatPromptTemplate for Socratic guidance
