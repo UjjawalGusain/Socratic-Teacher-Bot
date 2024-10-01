@@ -1,22 +1,37 @@
-body {
+/* body {
   background-color: rgb(48, 44, 44);
+  justify-content: space-around;
+  background-image: linear-gradient(to right bottom, rgba(5, 8, 16, .6), rgba(5, 8, 16, .6)), url(public/index.89d3119228d600788910.svg);
+  background-size: cover;
+  background-position: top;
+  height: 100vh;
+  align-items: center;
+  display: flex;
+} */
+/* Main Chat Container */
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */
 }
-
 .chat-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: none;
-  position: relative;
+  background: linear-gradient(to right, #434343, #000000), url('your-background-image-url');
+  background-size: cover;
+  background-position: center;
 }
-
+/* Chat Box Styling */
 .chat-box {
   width: 100%;
-  max-width: 400px;
-  background-color: rgba(255, 255, 255, 0.9); /* Added transparency */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  max-width: 1000px;
+  /* max-height: 1000px; */
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  background: linear-gradient(to right, #434343, #000000);
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -24,14 +39,18 @@ body {
   position: relative;
 }
 
+
+/* Chat Header */
 .chat-header {
+  font-family: 'Poppins', sans-serif;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
+  color: rgba(255, 255, 255, 0.9);
 }
 
+/* Chat Messages */
 .chat-messages {
   flex-grow: 1;
   padding: 10px;
@@ -43,9 +62,10 @@ body {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Messages */
 .message {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .message.user {
@@ -56,65 +76,109 @@ body {
   justify-content: flex-start;
 }
 
+/* Message Bubble Styling */
 .message-bubble {
-  padding: 10px;
+  padding: 12px 18px;
   border-radius: 20px;
   max-width: 75%;
   word-wrap: break-word;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in;
 }
 
 .message-bubble.user {
   background-color: #4299e1;
   color: white;
   text-align: right;
+  border-radius: 20px 20px 0 20px;
 }
 
 .message-bubble.bot {
   background-color: #e2e8f0;
   color: black;
   text-align: left;
+  border-radius: 20px 20px 20px 0;
 }
 
+/* Input and Send Button */
 .input-container {
   display: flex;
 }
 
 .chat-input {
   flex-grow: 1;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 5px 0 0 5px;
+  border-radius: 30px 0 0 30px;
   outline: none;
 }
 
 .chat-button {
-  padding: 10px 20px;
-  background-color: rgb(48, 44, 44);
+  padding: 12px 20px;
+  background-color: #333;
   color: white;
   border: none;
   cursor: pointer;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 30px 30px 0;
+  transition: background-color 0.3s;
 }
 
 .chat-button:hover {
   background-color: #2b6cb0;
 }
 
-/* Typing indicator styling */
-.typing-indicator {
-  color: gray;
-  font-style: italic;
-  margin-bottom: 10px;
-}
-
-/* Add this to position the image */
+/* Chatbot Image Styling */
 .chat-image {
   position: absolute;
-  top: -19%;
-  left: 35%;
-  /* transform: translateY(-50%); */
-  width: auto;
-  height: 15vh;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  font-style: italic;
+  color: gray;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.typing-indicator::after {
+  content: '...';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  40% {
+    color: gray;
+    text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  60% {
+    text-shadow: .25em 0 0 gray, .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  80%, 100% {
+    text-shadow: .25em 0 0 gray, .5em 0 0 gray;
+  }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -13,10 +13,10 @@ const connectDB = require('./config/db')
 const app = express();
 
 app.use(cors({
-    origin: 'https://socratic-teacher-bot-2.vercel.app', 
-    methods: 'GET,POST,PUT,DELETE',  
-    credentials: true             
-  }));
+  origin: ['https://socratic-teacher-bot-2.vercel.app', 'http://localhost:5173'], // Add localhost along with your Vercel domain
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
 
 // Middleware to parse JSON requests
 app.use(express.json());

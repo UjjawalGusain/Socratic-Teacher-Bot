@@ -20,12 +20,10 @@ const Login = () => {
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-
         navigate("/chatbot");
       }
     } catch (error) {
       if (error.response && error.response.data.msg) {
-        // Display error message from backend
         setFieldError("email", error.response.data.msg);
       } else {
         setFieldError("email", "Login failed");
@@ -41,8 +39,15 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <div className="login-form">
-        <h2>Login Form</h2>
+      <div className="login-left">
+        <img
+          src="public/2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" // Update with your image URL
+          alt="Login illustration"
+          className="login-image"
+        />
+      </div>
+      <div className="login-right">
+        <h2>Log in </h2>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={loginSchema}
@@ -51,11 +56,21 @@ const Login = () => {
           {() => (
             <Form>
               <div className="form-field">
-                <Field type="email" name="email" placeholder="Email Address" />
+                <Field
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  className="input-field"
+                />
                 <ErrorMessage name="email" component="div" className="error" />
               </div>
               <div className="form-field">
-                <Field type="password" name="password" placeholder="Password" />
+                <Field
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  className="input-field"
+                />
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -67,24 +82,17 @@ const Login = () => {
                   <Field type="checkbox" name="rememberMe" />
                   Remember me
                 </label>
-                <a href="#" className="forgot-password">
-                  Forgot password?
-                </a>
               </div>
               <button type="submit" className="login-button">
-                Login
+                Log in
               </button>
             </Form>
           )}
         </Formik>
         <p>
-          Not a member?
-          <span
-            onClick={handleSignupClick}
-            className="signup-link"
-            style={{ cursor: "pointer", color: "blue" }} // Optional styling for clarity
-          >
-            Signup now
+          Not a member?{" "}
+          <span onClick={handleSignupClick} className="signup-link">
+            Create an account
           </span>
         </p>
       </div>
