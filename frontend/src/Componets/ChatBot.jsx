@@ -89,7 +89,7 @@ const ChatBot = () => {
       
       <div className="chat-box">
       <img src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" alt="Chatbot Image" className="chat-image" />
-        <h2 className="chat-header">ChatBot</h2>
+        <h2 className="chat-header">Mr. Socrates.</h2>
         <div ref={chatBoxRef} className="chat-messages">
           {messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender}`}>
