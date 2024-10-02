@@ -29,9 +29,6 @@ const message = `
   Here are examples of how to respond when a student greets you:
   ${introPrompts.map((prompt) => `Input: ${prompt.input}\nOutput: ${prompt.output}`).join('\n\n')} 
 
-  If the student asks ANYTHING UNRELATED TO SORTING algorithms or data structures, ALWAYS RESPOND WITH:
-  "Sorry, student, this is not information I possess. I can help you with sorting algorithms. Is there anything else you want to know about sorting?"
-
   DO NOT mention labels like "Assistant," "Student," or "Teacher,", "Input", "Output" at all nor should you include chat numbers in your responses.
 
   Current conversation history: {conversationHistory}
