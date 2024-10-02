@@ -60,6 +60,7 @@ const ChatBot = () => {
           sessionId: sessionId,
           studentInput: input,
         });
+        
 
         // Add a placeholder message for the bot while typing
         setMessages((prevMessages) => [...prevMessages, { sender: 'bot', text: '' }]);
@@ -75,6 +76,13 @@ const ChatBot = () => {
         };
         setMessages((prevMessages) => [...prevMessages, errorMessage]);
       }
+    }
+  };
+
+  // Function to handle keypress (Enter key)
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();  // Trigger send message when "Enter" is pressed
     }
   };
 
@@ -105,6 +113,7 @@ const ChatBot = () => {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}  // Add the keypress event listener
             placeholder="Type a message..."
             className="chat-input"
           />

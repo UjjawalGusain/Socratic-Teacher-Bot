@@ -1,8 +1,8 @@
 const { HumanMessage } = require("@langchain/core/messages");
 const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
-const { FewShotChatMessagePromptTemplate, ChatPromptTemplate } = require("@langchain/core/prompts");
+const { ChatPromptTemplate } = require("@langchain/core/prompts");
 const { getSessionHistory } = require('./sessionUtils'); // Ensure correct path
-const { allPrompts } = require("../prompts/promptsExamples");
+const { examplePrompts, introPrompts } = require("../prompts/promptsExamples");
 
 // Use the Google Gemini model with proper error handling for API key
 if (!process.env.GOOGLE_GEMINI_API_KEY) {
@@ -13,61 +13,50 @@ const gemini = new ChatGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GEMINI_API_KEY,
 });
 
-// Define a template for generating few-shot examples
-const examplePrompt = ChatPromptTemplate.fromMessages([
-  ["human", "{input}"],
-  ["ai", "{output}"],
-]);
 
-// Create a FewShot template using prompts as examples
-const fewShotPrompt = new FewShotChatMessagePromptTemplate({
-  examplePrompt,
-  examples: allPrompts.map((prompt) => ({
-    input: prompt.input,
-    output: prompt.output,
-  })),
-  inputVariables: ["studentInput", "conversationHistory"], // Keep input variables relevant
-});
+// Socratic message template
+const message = `
+  You are Mr. Socrates, a Socratic teaching assistant focused on helping students understand sorting algorithms.
+  
+  Instead of providing direct answers, your role is to encourage deeper reflection by asking probing questions based on the student's input. 
 
-// console.log(fewShotPrompt);
+  Always greet the student if their latest message includes a common greeting, such as "hello" or "hi." For instance:
+  "Hello, student! I am Mr. Socrates. What question or thought brings you to this pursuit of understanding today?"
 
+  Here are examples of how to respond when a student greets you:
+  ${introPrompts.map((prompt) => `Input: ${prompt.input}\nOutput: ${prompt.output}`).join('\n\n')} 
 
-// Corrected ChatPromptTemplate for Socratic guidance
-const message = `You are a Socratic teaching assistant and your name is Mr. Socrates helping a student understand sorting algorithms.
-   You should never directly tell the student the answer. Instead, based on their input, ask a probing question that helps them reflect deeper. Give them a hint to their answer in your question.
-   The current conversation history is as follows: {conversationHistory}
-   The student's input is: {studentInput}
+  Do not mention labels like "Assistant," "Student," or "Teacher," nor should you include chat numbers in your responses.
 
-   If the student asks a question that is not related to sorting or data structures and algorithm, reply with something similar to:
-   "Sorry student. This is not some information I possess. I might be able to help you if you seek to understand sorting. Is there anything else you want to know regarding sorting algorithms?"
-   
-   Do not repeat any questions. Avoid asking the same question more than once, even if the topic persists.
-   Do not transition from a question suddenly. Ensure smooth transitions between questions and topics.
-   Slowly advance the concept. Each new question should be a gradual step towards deeper understanding, not a sudden leap.
-   
-   ### Answer Format:
-   1. Ask one clear and focused Socratic question based on their input. 
-   2. Always respond with a question designed to promote critical thinking.
-   3. Take the user towards the right answer by asking right questions. Questions should not repeat.
-   4. If user does not understand, give hints inside the question.
-   
-   Formulate the next question to guide the student in their learning process. 
-   
-   Your answer should follow this format:
-    - Always reply to greeting by greetings, and then your name, and then a question but only for the first question.
-    - Ask one Socratic question directly related to their input.
+  Current conversation history: {conversationHistory}
+  Student's input: {studentInput}
 
-   Examples: ${fewShotPrompt}`;
+  If the student asks a question unrelated to sorting algorithms or data structures, respond with:
+  "Sorry, student, this is not information I possess. I can help you with sorting algorithms. Is there anything else you want to know about sorting?"
 
+  Remember to:
+  - Avoid repeating questions.
+  - Ensure smooth transitions between topics.
+  - Gradually guide the student towards deeper understanding with each question.
+
+  **Answer Format:**
+  1. Ask one clear Socratic question based on the student's input.
+  2. Respond with a question designed to promote critical thinking.
+  3. If the student struggles to understand, provide hints within your question.
+
+  For example, here’s how you can ask a Socratic question related to their input:
+  ${examplePrompts.map((prompt) => `Input: ${prompt.input}\nOutput: ${prompt.output}`).join('\n\n')}
+`;
 
 // Create a ChatPromptTemplate using the fromMessages method
 const socraticTemplate = ChatPromptTemplate.fromMessages([
-  ["system", message], // Use "system" for the role of the message
-  // fewShotPrompt,
+  ["system", message], 
 ]);
 
 // Function to generate Socratic questions based on the student's input and session history
 const withMessageHistory = async (studentInput, sessionId) => {
+  // console.log("Start");
+  
   try {
     // Get the session history
     const session = await getSessionHistory(sessionId);
@@ -77,20 +66,39 @@ const withMessageHistory = async (studentInput, sessionId) => {
       session.messages = [];
     }
 
-    // Add the student's message to session history
-    session.messages.push({ role: "student", content: studentInput });
+    // console.log(session);
+    
+    // Find the current max chat number in the session
+    let maxChatNumber = session.messages.length
+      ? Math.max(...session.messages.map((msg) => msg.chatNumber || 0))
+      : 0;
+
+    // Increment the chat number for the new message
+    const newChatNumber = maxChatNumber + 1;
+    
+    // Add the student's message to session history with chat number
+    session.messages.push({
+      chatNumber: newChatNumber,
+      role: "student",
+      content: studentInput,
+    });
     await session.save();
 
-    // Format the conversation history (adding line breaks for readability)
+    // Format conversation history with chat number and role
     const conversationHistory = session.messages
-      .map((message) => `${message.role === 'student' ? 'Student' : 'Assistant'}: ${message.content}`)
-      .join("\n\n");  // Double line break for readability
+    .map((message) => {
+      return `Chat ${message.chatNumber} (Role: ${message.role}): ${message.content}`;
+    })
+    .join("\n\n");
 
     // Generate the Socratic prompt
     const socraticPromptStr = await socraticTemplate.format({
       studentInput,
-      conversationHistory,
+      conversationHistory: conversationHistory, // Assistant needs full context
     });
+    
+    // console.log(socraticPromptStr);
+    
 
     // Ensure Socratic prompt is not empty
     if (!socraticPromptStr) {
@@ -107,8 +115,15 @@ const withMessageHistory = async (studentInput, sessionId) => {
       throw new Error("Response content is empty!");
     }
 
-    // Add assistant's response to the session
-    session.messages.push({ role: "assistant", content: response.content });
+    // Increment chat number for the assistant's response
+    const assistantChatNumber = newChatNumber + 1;
+
+    // Add assistant's response to the session with chat number
+    session.messages.push({
+      chatNumber: assistantChatNumber,
+      role: "assistant",
+      content: response.content,
+    });
     await session.save();
 
     // Return assistant's response
@@ -119,5 +134,6 @@ const withMessageHistory = async (studentInput, sessionId) => {
     throw new Error("Failed to process the student's message. Please try again.");
   }
 };
+
 
 module.exports = { withMessageHistory };

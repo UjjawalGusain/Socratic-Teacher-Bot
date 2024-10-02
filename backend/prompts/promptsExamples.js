@@ -493,7 +493,7 @@ const introductoryPrompts = [
 
 
 
-const allPrompts = [
+const examplePrompts = [
   ...followUpPrompts,
   ...challengePrompts,
   ...guidingPrompts,
@@ -503,7 +503,11 @@ const allPrompts = [
   ...reflectivePrompts,
   ...clarificationPrompts,
   ...greetingPrompts,
-  ...introductoryPrompts,
+  ...introductoryPrompts
 ];
 
-module.exports = { allPrompts };
+const introPrompts = [
+  ...greetingPrompts
+]
+
+module.exports = { examplePrompts, introPrompts };

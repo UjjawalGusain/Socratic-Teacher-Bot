@@ -5,9 +5,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: 'Arial', sans-serif;
-  background:rgb(225, 210, 210);
+  background: rgb(225, 210, 210);
 }
 
 .login-container {
@@ -17,6 +18,26 @@ body {
   width: 100%;
   min-height: 100vh;
   background-color: rgb(225, 210, 210);
+  padding: 1rem;
+}
+
+.login-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-image {
+  width: 500px;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+.login-right {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login-form {
@@ -38,6 +59,14 @@ h2 {
   margin-bottom: 1.8rem;
   color: #333;
   font-size: 24px;
+}
+
+form {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .form-field {
@@ -62,6 +91,15 @@ h2 {
   box-shadow: 0 0 5px rgba(155, 89, 182, 0.3);
 }
 
+.lb-remember {
+  display: flex;
+  align-items: center;
+}
+
+.lb-remember > input {
+  margin: 3px;
+}
+
 .error {
   color: red;
   font-size: 12px;
@@ -69,9 +107,6 @@ h2 {
 }
 
 .options {
-  /* display: flex;
-  justify-content: center;
-  align-items:right; */
   font-size: 14px;
 }
 
@@ -112,13 +147,27 @@ h2 {
 
 .signup-link:hover {
   color: #9b59b6;
+  cursor: pointer;
 }
 
-/* Responsiveness */
+/* Medium Devices (Tablets and small laptops) */
 @media (max-width: 768px) {
+  .login-container {
+    padding: 2rem;
+  }
+
   .login-form {
-    width: 90%;
+    max-width: 90%;
     padding: 2rem 1.5rem;
+    border-radius: 10px;
+  }
+
+  .login-image {
+    width: 200px;
+  }
+
+  .login-image {
+    width: 300px;
   }
 
   h2 {
@@ -131,22 +180,33 @@ h2 {
   }
 }
 
+/* Small Devices (Phones) */
 @media (max-width: 480px) {
-  .login-form {
-    width: 100%;
-    padding: 1.5rem 1rem;
+  .login-container {
+    padding: 1.5rem;
+    flex-direction: column;
   }
 
+  .login-left {
+    display: none;
+  }
+
+
   h2 {
-    font-size: 20px;
+    font-size: 40px;
+  }
+
+  .form-field input {
+    padding: 10px 15px;
+    font-size: 14px;
   }
 
   .login-button {
     font-size: 14px;
-    padding: 8px 15px;
+    padding: 10px 15px;
   }
 
-  .form-field input {
-    font-size: 14px;
+  .options {
+    font-size: 13px;
   }
 }

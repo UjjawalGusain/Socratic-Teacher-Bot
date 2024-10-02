@@ -5,7 +5,8 @@ const sessionSchema = new mongoose.Schema({
   messages: [
     {
       role: { type: String, enum: ["student", "assistant"], required: true },
-      content: { type: String, required: true }
+      content: { type: String, required: true },
+      chatNumber: {type: String, required: true}
     }
   ]
 });

@@ -10,7 +10,8 @@ const chatWithAssistant = async (req, res) => {
     // Retrieve session history and generate a new Socratic question
     // console.log(`Student Input: ${studentInput}, session Id: ${sessionId}`);
     const response = await withMessageHistory(studentInput, sessionId);
-
+    // console.log(response);
+    
     // Return the generated Socratic question
     res.json({ message: response });
   } catch (error) {

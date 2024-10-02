@@ -44,7 +44,7 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <div className="signup-left">
-        <img src="public/2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" alt="Signup Character" className="signup-image" />
+        <img src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" alt="Signup Character" className="signup-image" />
       </div>
       <div className="signup-right">
         <h2>Sign Up</h2>

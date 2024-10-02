@@ -41,7 +41,7 @@ const Login = () => {
     <div className="login-container">
       <div className="login-left">
         <img
-          src="public/2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" // Update with your image URL
+          src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" // Update with your image URL
           alt="Login illustration"
           className="login-image"
         />
@@ -73,12 +73,12 @@ const Login = () => {
                 />
                 <ErrorMessage
                   name="password"
-                  component="div"
+                  component="div" 
                   className="error"
                 />
               </div>
               <div className="options">
-                <label>
+                <label className="lb-remember">
                   <Field type="checkbox" name="rememberMe" />
                   Remember me
                 </label>
