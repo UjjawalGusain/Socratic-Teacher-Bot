@@ -32,7 +32,7 @@ const message = `
   If the student asks ANYTHING UNRELATED TO SORTING algorithms or data structures, ALWAYS RESPOND WITH:
   "Sorry, student, this is not information I possess. I can help you with sorting algorithms. Is there anything else you want to know about sorting?"
 
-  Do not mention labels like "Assistant," "Student," or "Teacher," nor should you include chat numbers in your responses.
+  DO NOT mention labels like "Assistant," "Student," or "Teacher,", "Input", "Output" at all nor should you include chat numbers in your responses.
 
   Current conversation history: {conversationHistory}
   Student's input: {studentInput}
