@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import '../CSS_Files/Signup.css'; 
+// import '../CSS_Files/Signup.css'; 
 import { authEndpoints } from '../../api/api';
 import axios from 'axios';
 

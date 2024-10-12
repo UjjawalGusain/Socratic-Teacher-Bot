@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../CSS_Files/Chatbot.css'; 
+// import '../CSS_Files/Chatbot.css'; 
 import axios from 'axios';
-import { sessionEndpoints } from '../../api/api';  // Import your API endpoints
+import { sessionEndpoints } from '../../../api/api';  // Import your API endpoints
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
