@@ -12,7 +12,7 @@ function SideBar() {
 
   return (
     <div
-      className={`h-full bg-[#051024] rounded-xl py-5 px-2 flex flex-col justify-between transition-width duration-300 ${isOpen ? "w-64 items-end" : "w-16 items-center"} bg-[url('pattern2.png')] bg-opacity-5`} // Make pattern very light
+      className={`flex-grow h-full bg-[#051024] rounded-xl py-5 px-2 flex flex-col justify-between transition-width duration-300 ${isOpen ? "w-64 items-end" : "w-16 items-center"} bg-[url('pattern2.png')] bg-opacity-5`} // Make pattern very light
     >
       {/* Button to toggle sidebar */}
       <button onClick={toggleSidebar}>
@@ -38,7 +38,7 @@ function SideBar() {
             </li>
 
             <li className="w-full flex justify-center items-end">
-              <button className="w-full border bg-[#030A1C] border-[#282934] h-16 rounded-md text-right p-4 font-light text-opacity-80 text-[#F8F8FF]">
+              <button className="w-full border bg-[#030A1C] border-[#282934] h-16 rounded-md text-right p-4 font-light text-opacity-80 text-[#F8F8FF] text-nowrap">
                 Coding Assistant
               </button>
             </li>

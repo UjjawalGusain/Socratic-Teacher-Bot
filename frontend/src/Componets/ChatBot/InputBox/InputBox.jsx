@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { VscSend } from "react-icons/vsc";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
 
-function InputBox({ placeholder, onSubmit }) {
+function InputBox({ onSubmit }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (e) => {
@@ -12,23 +14,24 @@ function InputBox({ placeholder, onSubmit }) {
     if (onSubmit) {
       onSubmit(inputValue);
     }
-    setInputValue(''); // Clear the input after submission
+    setInputValue(''); 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex items-center">
+    <form onSubmit={handleSubmit} className="w-full h-fit flex items-center border-black border-2 m-4 rounded-lg focus:ring focus:ring-blue-500 focus:shadow-md">
       <input
         type="text"
         value={inputValue}
         onChange={handleInputChange}
-        placeholder={placeholder}
-        className="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 m-5"
+        placeholder="Type a new message"
+        className="flex flex-shrink w-full px-4 py-2 my-2 focus:ring-0 focus:ring-offset-0 focus: outline-none bg-[#F8F8FF]"
       />
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition duration-200"
+        className="mr-3 flex gap-4 justify-center"
       >
-        Send
+        {/* <MdOutlineEmojiEmotions className='size-6'/> */}
+        <VscSend className='size-6'/>
       </button>
     </form>
   );
