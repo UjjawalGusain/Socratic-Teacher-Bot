@@ -12,7 +12,7 @@ function NavBar() {
         style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
       >
         <img
-          src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png"
+          src="socrate-img.png"
           alt="socratic-icon"
           className="size-8"
         />

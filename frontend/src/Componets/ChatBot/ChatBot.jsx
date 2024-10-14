@@ -12,11 +12,12 @@ function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const endOfMessagesRef = useRef(null);
 
-  // Function to create a new session when the component mounts
+  // Function to create a new session
   const createNewSession = async () => {
     try {
       const response = await axios.post(sessionEndpoints.CREATE_SESSION_API);
       setSessionId(response.data.sessionId); // Store the session ID in the state
+      setMessages([]); // Reset messages for the new session
     } catch (error) {
       console.error("Error creating session:", error);
     }
@@ -26,12 +27,11 @@ function ChatBot() {
     createNewSession();
   }, []);
 
-  // Function to simulate typing effect
   const typeBotMessage = (message) => {
     let currentIndex = 0;
     const botMessage = { text: '', isUser: false };
 
-    setIsTyping(true); // Start typing
+    setIsTyping(true); 
 
     const typeInterval = setInterval(() => {
       if (currentIndex < message.length) {
@@ -43,17 +43,16 @@ function ChatBot() {
         });
         currentIndex++;
       } else {
-        setIsTyping(false); // Stop typing once the message is fully typed
+        setIsTyping(false); 
         clearInterval(typeInterval);
       }
-    }, 50); // Adjust this interval for typing speed
+    }, 50); 
   };
 
   const handleSendMessage = async (message) => {
     if (message.trim() && sessionId) {
       const userMessage = { text: message, isUser: true };
 
-      // Add user's message to the chat
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput('');
 
@@ -63,10 +62,8 @@ function ChatBot() {
           studentInput: message,
         });
 
-        // Add a placeholder message for the bot while typing
         setMessages((prevMessages) => [...prevMessages, { text: '', isUser: false }]);
-        
-        // Start typing the bot's message
+
         typeBotMessage(response.data.message);
 
       } catch (error) {
@@ -80,7 +77,6 @@ function ChatBot() {
     }
   };
 
-  // Scroll to the last message whenever messages change
   useEffect(() => {
     if (endOfMessagesRef.current) {
       endOfMessagesRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -89,7 +85,8 @@ function ChatBot() {
 
   return (
     <div className='flex h-screen p-8 pb-12 w-screen bg-[#F8F8FF]'>
-      <SideBar />
+      {/* Pass the createNewSession function to SideBar */}
+      <SideBar onNewChat={createNewSession} />
       <div className="w-full flex flex-col ml-4">
         <div className="flex-1 overflow-auto">
           <div className="flex flex-col">

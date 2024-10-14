@@ -52,7 +52,7 @@ function Footer() {
       <div className="text-white flex flex-col gap-3 items-start">
         <div className="flex items-center space-x-3 mb-4">
           <img
-            src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png"
+            src="socrate-img.png"
             alt="socratic-icon"
             className="w-10 h-10 object-contain"
           />
