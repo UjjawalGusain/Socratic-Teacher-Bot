@@ -30,7 +30,7 @@ const features = [
 
 function FeatureCardHolder() {
   return (
-    <div className='w-full flex flex-wrap justify-between gap-3'>
+    <div className='w-full flex flex-wrap justify-center lg:justify-between gap-3'>
       {features.map((feature, index) => (
         <FeatureCard key={index} title={feature.title} text={feature.text} />
       ))}

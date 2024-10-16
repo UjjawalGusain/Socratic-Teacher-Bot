@@ -27,8 +27,8 @@ function ButtonGroup() {
   const [activeButton, setActiveButton] = useState("Home"); // Initial active button
 
   return (
-    <div className="gap-10 flex">
-      <div className="flex gap-6">
+    <div className="gap-10 flex md:flex-row flex-col ">
+      <div className="flex gap-6 md:flex-row flex-col ">
         <Button
           text={"Home"}
           isActive={activeButton === "Home"}
@@ -45,7 +45,7 @@ function ButtonGroup() {
           onClick={() => handleNavButtonClick("More")}
         />
       </div>
-      <div className="text-white flex gap-4">
+      <div className="text-white flex gap-4 md:flex-row flex-col ">
         <Button
           text={"Sign In"}
           isActive={true}

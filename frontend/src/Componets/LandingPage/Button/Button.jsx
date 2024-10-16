@@ -3,7 +3,7 @@ import React from 'react'
 function Button({ isActive, theme = 'light', text, isRegister = false, onClick }) {
   const activeClass = isActive 
     ? 'bg-[#E3E3E3] text-black' 
-    : 'text-white text-opacity-55 shadow-lg'; 
+    : 'text-white text-opacity-55 shadow-md'; 
     
   const themeClass = theme === 'light' 
     ? 'hover:bg-gray-200 hover:text-black' 
@@ -14,7 +14,7 @@ function Button({ isActive, theme = 'light', text, isRegister = false, onClick }
 
   return (
     <button 
-      className={`px-3 py-1 rounded-lg transition-all duration-300  ease-in-out ${activeClass} ${themeClass} ${registerClass}`}
+      className={`px-3 py-1 rounded-md transition-all duration-300  ease-in-out ${activeClass} ${themeClass} ${registerClass}`}
       onClick={onClick}
     >
       {text}

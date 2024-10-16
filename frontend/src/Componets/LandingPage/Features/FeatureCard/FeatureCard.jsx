@@ -10,8 +10,8 @@ function FeatureCard({title, text}) {
       </div>
       
       {/* Content Section */}
-      <div className='flex flex-col gap-2'>
-        <p className='text-2xl text-left'>{title}</p>
+      <div className='flex flex-col items-start justify-normal'>
+        <p className='text-md md:text-lg lg:text-2xl text-left'>{title}</p>
         <p className='text-sm text-white text-opacity-55'>
           {text}
         </p>
