@@ -37,12 +37,23 @@ const Signup = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate('/');
+  };
+
   const handleLoginClick = () => {
     navigate("/login");
   };
 
   return (
     <div className="w-screen md:h-screen h-full bg-[#030A1C] flex flex-col justify-center items-center md:flex-row p-5">
+
+      <button className="absolute top-4 left-4" onClick={handleProfileClick}>
+        <div className="border-2 border-[#F8F8FF] rounded-2xl size-10 p-1">
+          <img src="avatar.png" alt="avatar-img" />
+        </div>
+      </button>
+
       {/* Left Section */}
       <div className="md:flex w-full md:w-2/5 lg:w-1/2 flex-col justify-center items-center p-5 md:p-0">
         <div className="flex flex-col gap-5 justify-center items-center md:items-start md:w-3/4">
