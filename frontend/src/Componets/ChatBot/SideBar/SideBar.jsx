@@ -18,7 +18,7 @@ function SideBar({ onNewChat }) { // Receive the onNewChat function as a prop
     <div
       className={`flex-grow h-full bg-[#051024] rounded-xl py-5 px-2 flex flex-col justify-between transition-width duration-300 ${
         isOpen ? "w-64 items-end" : "w-16 items-center"
-      } bg-[url('pattern2.png')] bg-opacity-5`}
+      } bg-[url('/pattern2.png')] bg-opacity-5`}
     >
       {/* Button to toggle sidebar */}
       <button onClick={toggleSidebar}>
