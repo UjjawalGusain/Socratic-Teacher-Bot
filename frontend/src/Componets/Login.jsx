@@ -2,7 +2,6 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import "../CSS_Files/Login.css";
 import axios from "axios";
 import { authEndpoints } from "../../api/api";
 
@@ -26,7 +25,7 @@ const Login = () => {
       if (error.response && error.response.data.msg) {
         setFieldError("email", error.response.data.msg);
       } else {
-        setFieldError("email", "Login failed");
+        setFieldError("email", "Login failed. Please try again.");
       }
     } finally {
       setSubmitting(false);
@@ -38,63 +37,89 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-left">
-        <img
-          src="2ff100a6-7dba-11ef-b8f0-0242ac11000e-removebg-preview.png" // Update with your image URL
-          alt="Login illustration"
-          className="login-image"
-        />
+    <div className="w-screen h-screen bg-[#030A1C] flex flex-col justify-center items-center md:flex-row p-5">
+      {/* Left Section */}
+      <div className="md:flex w-full md:w-2/5 lg:w-1/2 flex-col justify-center items-center p-5 md:p-0">
+        <div className="flex flex-col gap-5 justify-center items-center md:items-start md:w-3/4">
+          <p className="text-[#F9F9FF] text-3xl md:text-4xl font-medium">
+            Welcome Back!
+          </p>
+          <p className="text-[#F9F9FF] text-xl md:text-2xl font-normal text-center md:text-left">
+            Log in and continue studying with us
+          </p>
+          <img
+            src="teacher-svg.svg"
+            alt="Study Illustration"
+            className="w-3/4 md:w-auto filter invert brightness-0 md:block hidden md:z-0"
+          />
+        </div>
       </div>
-      <div className="login-right">
-        <h2>Log in </h2>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={loginSchema}
-          onSubmit={handleLogin}
-        >
-          {() => (
-            <Form>
-              <div className="form-field">
-                <Field
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  className="input-field"
-                />
-                <ErrorMessage name="email" component="div" className="error" />
-              </div>
-              <div className="form-field">
-                <Field
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="input-field"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div" 
-                  className="error"
-                />
-              </div>
-              <div className="options">
-                <label className="lb-remember">
-                  <Field type="checkbox" name="rememberMe" />
-                  Remember me
-                </label>
-              </div>
-              <button type="submit" className="login-button">
-                Log in
-              </button>
-            </Form>
-          )}
-        </Formik>
-        <p>
-          Not a member?{" "}
-          <span onClick={handleSignupClick} className="signup-link">
-            Create an account
-          </span>
-        </p>
+
+      {/* Right Section */}
+      <div className="flex w-full md:w-3/5 lg:w-1/2 flex-col justify-center items-center md:items-end my-3 lg:my-5 md:mr-20 z-20">
+        <div className="m-5 w-80 md:w-4/5 rounded-xl bg-white p-8 md:p-6 lg:p-10 flex flex-col gap-10">
+          <p className="text-2xl md:text-3xl font-medium text-[#030A1C]">
+            Log in to your account
+          </p>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={loginSchema}
+            onSubmit={handleLogin}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-5">
+                {/* Email Field */}
+                <div>
+                  <Field
+                    type="email"
+                    name="email"
+                    placeholder="Email address"
+                    className="border border-gray-300 rounded p-3 w-full"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                {/* Password Field */}
+                <div>
+                  <Field
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    className="border border-gray-300 rounded p-3 w-full"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className={`${
+                    isSubmitting ? "bg-gray-300" : "bg-gray-500"
+                  } text-white py-2 px-4 rounded w-full`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Logging in..." : "Log in"}
+                </button>
+
+                {/* Signup Link */}
+                <p className="text-center mt-4">
+                  Don't have an account?{" "}
+                  <button className="underline" onClick={handleSignupClick}>
+                    Sign up
+                  </button>
+                </p>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </div>
   );
