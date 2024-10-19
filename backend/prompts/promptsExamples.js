@@ -510,4 +510,47 @@ const introPrompts = [
   ...greetingPrompts
 ]
 
-module.exports = { examplePrompts, introPrompts };
+const fs = require('fs');
+
+function mergeAndWriteCSV(fileName, ...promptArrays) {
+  // Start with the CSV header
+  let csvContent = 'Input,Expected Output\n';
+
+  // Merge all the prompt arrays into a single array
+  promptArrays.forEach(promptArray => {
+    promptArray.forEach(prompt => {
+      // Escape quotes and commas in the input and output text
+      const input = prompt.input.replace(/"/g, '""'); // Escape quotes
+      const output = prompt.output.replace(/"/g, '""'); // Escape quotes
+
+      // Add a new row in CSV format
+      csvContent += `"${input}","${output}"\n`;
+    });
+  });
+
+  // Write the CSV content to a file
+  fs.writeFile(fileName, csvContent, (err) => {
+    if (err) {
+      console.error('Error writing file:', err);
+    } else {
+      console.log(`File ${fileName} has been saved successfully!`);
+    }
+  });
+}
+mergeAndWriteCSV(
+  'mergedPrompts.csv', 
+  followUpPrompts,
+  challengePrompts,
+  guidingPrompts,
+  reinforcementPrompts,
+  probingPrompts,
+  diagnosticPrompts,
+  reflectivePrompts,
+  clarificationPrompts,
+  greetingPrompts,
+  introductoryPrompts
+)
+
+
+
+// module.exports = { examplePrompts, introPrompts };
