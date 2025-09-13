@@ -1,5 +1,9 @@
 # Socratic Teacher Bot
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/441cc1de-6c2d-4418-ad87-c65d355ae2f3" alt="unigit_src_image" width="512" height="512" />
+</div>
+
 ## Project Overview
 
 The Socratic Teacher Bot is a Gen AI-powered teaching assistant designed to enhance student understanding of Data Structures and Algorithms (DSA) using the Socratic teaching method. This project leverages the Google Gemini model and the LangChain framework to engage students through dynamic and reflective questioning, promoting deeper comprehension of sorting algorithms.
